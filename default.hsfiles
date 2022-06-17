@@ -17,26 +17,41 @@ extra-source-files:  README.md
 common common-options
   default-language: Haskell2010
 
-  mixins:
-      base hiding (Prelude)
-    , relude (Relude as Prelude)
-
   build-depends:
       base >= 4.7 && < 5
-    , relude ^>= 1.0.0.0
     , bytestring ^>= 0.10
     , mtl ^>= 2.2
+    , relude ^>= 1.0.0.0
     , stm >= 2.4 && < 2.6
     , text ^>= 1.2
     , transformers ^>= 0.5
     , unordered-containers >= 0.2.7 && < 0.3
 
   default-extensions:
-  ghc-options: -Weverything -Wno-safe -Wno-unused-packages -Wno-missing-safe-haskell-mode -Wno-missing-import-lists -Wno-missing-local-signatures -Wno-implicit-prelude
+    DataKinds
+    DeriveAnyClass
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveTraversable
+    DerivingStrategies
+    DuplicateRecordFields
+    GADTs
+    ImportQualifiedPost
+    KindSignatures
+    MultiParamTypeClasses
+    NoImplicitPrelude
+    OverloadedStrings
+    ScopedTypeVariables
+    TypeApplications
+    TypeOperators
+
+  ghc-options: -Wall -Wno-implicit-prelude
 
 library
   import: common-options
   hs-source-dirs: src
+  build-depends:
   exposed-modules:
     Lib
 
@@ -44,24 +59,26 @@ executable {{name}}
   import: common-options
   hs-source-dirs:      exe
   main-is:             Main.hs
-  build-depends:       
+  build-depends:
     base >= 4.7 && < 5
   ghc-options:
     -threaded
     -rtsopts
     -with-rtsopts=-N
-  
-tests:
-  {{name}}-test:
+
+test-suite {{name}}-test
   import: common-options
-  main:                Spec.hs
-  source-dirs:         test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs: test
   ghc-options:
     -threaded
     -rtsopts
     -with-rtsopts=-N
-  dependencies:
-    {{name}}
+  build-depends:
+      {{name}}
+    , tasty
+    , tasty-hunit
 
 {-# START_FILE Setup.hs #-}
 import Distribution.Simple
@@ -85,7 +102,7 @@ main = do
   putStrLn "executable"
 
 {-# START_FILE stack.yaml #-}
-resolver: lts-19.2
+resolver: lts-19.11
 
 packages:
 - .
