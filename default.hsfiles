@@ -88,14 +88,27 @@ main = defaultMain
 # {{name}}
 
 {-# START_FILE test/Spec.hs #-}
+import Relude
+import Test.Tasty
+import Test.Tasty.HUnit
+
 main :: IO ()
-main = putStrLn "Test suite not yet implemented"
+main = defaultMain tests
+
+tests :: TestTree
+tests = testGroup ""
+  [ testEcho ]
+
 
 {-# START_FILE src/Lib.hs #-}
 module Lib () where
 
+import Relude
+
 {-# START_FILE exe/Main.hs #-}
 module Main (main) where
+
+import Relude
 
 main :: IO ()
 main = do
